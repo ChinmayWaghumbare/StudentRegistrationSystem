@@ -1,11 +1,28 @@
-﻿@model SudentRegistrationSystem.Models.Student
+﻿@using SudentRegistrationSystem.Models
+@model SudentRegistrationSystem.Models.Student
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm()) 
+<style type="text/css">
+    table {
+        width: 100%;
+        margin: 20px 0;
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid #cdcdcd;
+    }
+
+        table th, table td {
+            padding: 5px;
+            text-align: left;
+        }
+</style>
+@using (Html.BeginForm("Create","Student",FormMethod.Post)) 
 {
     @Html.AntiForgeryToken()
     
@@ -21,9 +38,36 @@
         </div>
     </div>
 
+    @if (ViewData["Projects"] != null)
+    {
+    <div>
+        <h4>Project List</h4>
+        <table id="projectDetailsTable">
+            <thead><tr>
+    <th>Project Name</th>
+    <th>Description</th>
+    <th>Team Size</th>
+</tr>
+            </thead>
+            <tbody>
+                @foreach (var obj in (IList<Project>)ViewData["Projects"])
+                {
+                <tr>
+                    <td>@obj.PrjctName</td>
+                    <td>@obj.Description</td>
+                    <td>@obj.TeamSize</td>
+                </tr>
+                }
+            </tbody>
 
+        </table>
+
+
+    </div>
+
+    }
     <div class="form-group">
-        <button id="saveProject" type="button">Add Projects</button>
+        <button id="addProject" type="button">Add Projects</button>
     </div>
     <div id="Display">
 
@@ -45,7 +89,7 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 <script type="text/javascript">
-$("#saveProject").click(function () {
+$("#addProject").click(function () {
     $.get('@Url.Action("Index","Project")', {}, function (response) {
         $("#Display").html(response);
     });

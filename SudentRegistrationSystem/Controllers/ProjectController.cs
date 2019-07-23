@@ -12,17 +12,28 @@ namespace SudentRegistrationSystem.Controllers
         // GET: Project
         public ActionResult Index()
         {
-            List<Project> projects = new List<Project>();
-            projects.Add(new Project());
-            ViewData["Projects"] = projects;
-            return PartialView("ProjectPartial");
+            
+            //Project obj = new Project();
+            //obj.PrjctName = "Test";
+            //obj.TeamSize = 2;
+            //obj.Description = "TestDescription";
+            return PartialView("ProjectPartial");//,obj);
         }
 
-        public void saveProject(Project prjobj)
+        public ActionResult saveProject(Project prjobj)
         {
-            //List<Project> projects = new List<Project>();
-            //projects.AddRange((ViewData["Projects"]));
-            //ViewData["Projects"] = null;
+            //TryValidateModel(prjobj);
+            if (!ModelState.IsValid)
+            {
+                var err = ModelState.Values.Where(data =>  data.Errors.Count > 0 ).SelectMany(E=>E.Errors).Select(M=>M.ErrorMessage);
+                string error = string.Empty;
+                foreach(string errMsg in err)
+                {
+                    error += errMsg;
+                }
+                return Json("error:"+error);
+            }
+            return Json(prjobj);
         }
     }
 }

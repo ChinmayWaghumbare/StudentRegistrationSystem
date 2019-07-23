@@ -11,13 +11,15 @@ namespace SudentRegistrationSystem.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public class Project
     {
         public int ID { get; set; }
         public string PrjctName { get; set; }
         public Nullable<int> StudId { get; set; }
         public Nullable<int> TeamSize { get; set; }
+        [Required]
         public string Description { get; set; }
     
         public virtual Student Student { get; set; }
