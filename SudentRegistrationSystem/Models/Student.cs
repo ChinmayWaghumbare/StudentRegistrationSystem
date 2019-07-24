@@ -15,10 +15,10 @@ namespace SudentRegistrationSystem.Models
 
     public class Student
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Student()
         {
-            this.Projects = new HashSet<Project>();
+            this.Projects = new List<Project>();
         }
     
         public int ID { get; set; }
@@ -26,7 +26,7 @@ namespace SudentRegistrationSystem.Models
         [Display(Name="Student Name")]
         public string Name { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Project> Projects { get; set; }
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public IList<Project> Projects { get; set; }
     }
 }

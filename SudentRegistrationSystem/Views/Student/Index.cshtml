@@ -38,33 +38,37 @@
         </div>
     </div>
 
+    @Html.HiddenFor(model=>model.Projects)
+
     @if (ViewData["Projects"] != null)
     {
-    <div>
-        <h4>Project List</h4>
-        <table id="projectDetailsTable">
-            <thead><tr>
-    <th>Project Name</th>
-    <th>Description</th>
-    <th>Team Size</th>
-</tr>
-            </thead>
-            <tbody>
-                @foreach (var obj in (IList<Project>)ViewData["Projects"])
-                {
-                <tr>
-                    <td>@obj.PrjctName</td>
-                    <td>@obj.Description</td>
-                    <td>@obj.TeamSize</td>
-                </tr>
-                }
-            </tbody>
+        <div>
+            <h4>Project List</h4>
+            <table id="projectDetailsTable">
+                <thead>
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Description</th>
+                        <th>Team Size</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var obj in (IList<Project>)ViewData["Projects"])
+                    {
+                        <tr>
+                            <td>@obj.PrjctName</td>
+                            <td>@obj.Description</td>
+                            <td>@obj.TeamSize</td>
+                        </tr>
+                    }
+                </tbody>
 
-        </table>
+            </table>
 
 
-    </div>
-
+        </div>
+        
+        
     }
     <div class="form-group">
         <button id="addProject" type="button">Add Projects</button>
@@ -76,7 +80,7 @@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
+            <input id="saveStudent" type="submit" value="Create" class="btn btn-default" />
         </div>
     </div>
 </div>
@@ -90,12 +94,32 @@
     @Scripts.Render("~/bundles/jqueryval")
 <script type="text/javascript">
 $("#addProject").click(function () {
-    $.get('@Url.Action("Index","Project")', {}, function (response) {
+    $.get('@Url.Action("Index", "Project")', {}, function (response) {
         $("#Display").html(response);
     });
 
-   
 });
+    $("#saveStudent").click(function () {
+        alert("in saveProject");
+        var projects = new Array();
+        $("#projectDetailsTable tbody tr").each(function () {
+            var row = $(this);
+            var project = {};
+            project.PrjctName = row.find("td").eq(0).html();
+            project.TeamSize = 1;
+            project.Description = row.find("td").eq(1).html();
+            projects.push(project);
+           
+        });
+        console.log(projects);
+        
+       
+        $("#Projects").val(JSON.stringify(projects));
+            alert($("#Projects").val());
+            alert("end saveProject");
+    });
+   
+
 </script>
 }
 
