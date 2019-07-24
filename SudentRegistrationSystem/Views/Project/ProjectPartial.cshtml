@@ -86,7 +86,7 @@
                 success: function (result) {
                     alert("Success");
                     data = result;
-                    markup = '<tr><td>' + data['PrjctName'] + '</td><td>' + data['TeamSize'] + '</td><td>' + data['Description']+'</td></tr>';
+                    markup = '<tr><td>' + data['PrjctName'] + '</td><td>' + data['Description'] + '</td><td>' + data['TeamSize']+'</td></tr>';
                     $("#projectDetailsTable tbody").append(markup);
 
                 },

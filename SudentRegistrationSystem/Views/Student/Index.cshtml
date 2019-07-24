@@ -22,8 +22,7 @@
             text-align: left;
         }
 </style>
-@using (Html.BeginForm("Create","Student",FormMethod.Post)) 
-{
+@{
     @Html.AntiForgeryToken()
     
 <div class="form-horizontal">
@@ -53,13 +52,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var obj in (IList<Project>)ViewData["Projects"])
+                    @{
+                        Html.ValueFor(model => model.Projects, ViewData["Projects"].ToString());
+                    }
+                    @foreach (Project obj in (IList<Project>)ViewData["Projects"])
                     {
-                        <tr>
-                            <td>@obj.PrjctName</td>
-                            <td>@obj.Description</td>
-                            <td>@obj.TeamSize</td>
-                        </tr>
+                            <tr>
+                                <td>@obj.PrjctName</td>
+                                <td>@obj.Description</td>
+                                <td>@obj.TeamSize</td>
+                            </tr>
                     }
                 </tbody>
 
@@ -105,6 +107,7 @@ $("#addProject").click(function () {
         $("#projectDetailsTable tbody tr").each(function () {
             var row = $(this);
             var project = {};
+            project.Id = 0;
             project.PrjctName = row.find("td").eq(0).html();
             project.TeamSize = 1;
             project.Description = row.find("td").eq(1).html();
@@ -113,10 +116,23 @@ $("#addProject").click(function () {
         });
         console.log(projects);
         
-       
-        $("#Projects").val(JSON.stringify(projects));
-            alert($("#Projects").val());
-            alert("end saveProject");
+        var student = {};
+        student.projects = projects;
+        student.Name = $("#Name").val();
+
+        $.ajax({
+            method: 'Post',
+            url: 'Create',
+            data: student,
+            success: function () {
+                alert("success");
+            },
+            error: function () {
+                alert("error");
+            }
+
+        });
+        
     });
    
 
