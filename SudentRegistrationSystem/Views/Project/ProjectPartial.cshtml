@@ -72,11 +72,11 @@
     });
 
     function saveProjects() {
-
+        alert("In SaveProject");
         var model = {
-            PrjctName: "Test",
-            Description: "Desc",
-            TeamSize: 3
+            PrjctName: $("#PrjctName").val(),
+            Description: $("#Description").val(),
+            TeamSize: $("#TeamSize").val()
         };
         $.ajax(
             {
@@ -86,9 +86,14 @@
                 success: function (result) {
                     alert("Success");
                     data = result;
-                    markup = '<tr><td>' + data['PrjctName'] + '</td><td>' + data['Description'] + '</td><td>' + data['TeamSize']+'</td></tr>';
+                    markup = '<tr><td>' + data['PrjctName'] + '</td><td>' + data['Description'] + '</td><td>' + data['TeamSize'] + '</td></tr>';
+                    if ($("#projectDetailsTable tbody").length == 0) {
+                        tblMarkup = '<div><h4>Project List</h4><table><thead><tr><th>Project Name</th><th>Description</th><th>Team Size</th></tr></thead><tbody></tbody></table></div>';
+                        $("#projectDetailsTable").append(tblMarkup);
+                    }
+                    
                     $("#projectDetailsTable tbody").append(markup);
-
+                    $("#Display").empty();
                 },
                 error: function () {
                     alert("Error");

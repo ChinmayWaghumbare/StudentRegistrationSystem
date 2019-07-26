@@ -29,6 +29,8 @@
     <h4>Student</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    @Html.HiddenFor(model=>model.ID)
     <div class="form-group">
         @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
@@ -38,30 +40,32 @@
     </div>
 
     @Html.HiddenFor(model=>model.Projects)
-
-    @if (ViewData["Projects"] != null)
+    <div id="projectDetailsTable">
+    @if (Model!=null && Model.Projects.Count != 0 )
     {
         <div>
             <h4>Project List</h4>
-            <table id="projectDetailsTable">
+            <table>
                 <thead>
                     <tr>
                         <th>Project Name</th>
                         <th>Description</th>
                         <th>Team Size</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @{
-                        Html.ValueFor(model => model.Projects, ViewData["Projects"].ToString());
-                    }
-                    @foreach (Project obj in (IList<Project>)ViewData["Projects"])
+                    
+                    @foreach (Project obj in Model.Projects)
                     {
-                            <tr>
-                                <td>@obj.PrjctName</td>
-                                <td>@obj.Description</td>
-                                <td>@obj.TeamSize</td>
-                            </tr>
+                    <tr>
+                        <td>@obj.PrjctName</td>
+                        <td>@obj.Description</td>
+                        <td>@obj.TeamSize</td>
+                        <td>@Html.ActionLink("Edit","Index",obj)</td>
+                        <td class="editProject" >Delete</td>
+                    </tr>
                     }
                 </tbody>
 
@@ -72,6 +76,7 @@
         
         
     }
+    </div>
     <div class="form-group">
         <button id="addProject" type="button">Add Projects</button>
     </div>
@@ -95,6 +100,27 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 <script type="text/javascript">
+    $(".editProject").click(function () {
+        var htmlElement = $(this).parent()
+        Prjctobj = {};
+        Prjctobj.PrjctName = htmlElement.find("td").eq(0).html();
+        Prjctobj.Description = htmlElement.find("td").eq(1).html();
+        Prjctobj.TeamSize = htmlElement.find("td").eq(2).html();
+
+        console.log(Prjctobj);
+        
+        $.get('@Url.Action("Index", "Project")', Prjctobj, function (response) {
+            $("#Display").html(response);
+        });
+    });
+
+   function editProjectBtn (Prjctobj) {
+        console.log(Prjctobj);
+        $.get('@Url.Action("Index", "Project")', Prjctobj, function (response) {
+        $("#Display").html(response);
+    });
+    };
+
 $("#addProject").click(function () {
     $.get('@Url.Action("Index", "Project")', {}, function (response) {
         $("#Display").html(response);
@@ -119,19 +145,25 @@ $("#addProject").click(function () {
         var student = {};
         student.projects = projects;
         student.Name = $("#Name").val();
+        student.Id = $("#ID").val();
 
         $.ajax({
             method: 'Post',
             url: 'Create',
             data: student,
-            success: function () {
+            success: function (result) {
                 alert("success");
+                alert(result["Name"]);
+                var link = '@Url.Action("Edit",new { Name = "replace" })';
+                link = link.replace("replace", result["Name"]);
+
+                window.location.href = link;
             },
             error: function () {
-                alert("error");
-            }
+                        alert("error");
+                    }
 
-        });
+                });
         
     });
    

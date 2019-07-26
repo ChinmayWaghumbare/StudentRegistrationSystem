@@ -12,13 +12,15 @@ namespace SudentRegistrationSystem.Controllers
     {
         StudentRegistrationSyastemEntities db = new StudentRegistrationSyastemEntities();
         // GET: Student
-        public ActionResult Index()
+        public ActionResult Index(string Name)
         {
-            List<Project> projects = new List<Project>();
-            projects.Add(new Project { PrjctName = "1", TeamSize = 1, Description = "1" });
-            ViewData["Projects"] = projects;
+            Student stud = new Student();
+            if (Name != null)
+            {
+                stud = db.Students.Include("Projects").Where(s => s.Name == Name).Select(s => s).FirstOrDefault();
+            }
 
-            return View();
+            return View(stud);
         }
         [HttpPost]
         public ActionResult Create(Student obj)
@@ -26,22 +28,52 @@ namespace SudentRegistrationSystem.Controllers
             if (ModelState.IsValid)
             {
                 List<Project> prjct = new List<Project>();
-                prjct.AddRange(obj.Projects);
-                obj.Projects = new List<Project>();
-
-                db.Entry(obj).State = EntityState.Added;
-
-                int id = db.SaveChanges();
-                foreach(Project p in prjct)
+                if (obj.ID == 0)
                 {
-                    p.StudId = id;
-                    db.Entry(p).State = EntityState.Added;
-                    db.SaveChanges();
-                }
-                
+                    
+                    prjct.AddRange(obj.Projects);
+                    obj.Projects = new List<Project>();
 
+                    db.Entry(obj).State = EntityState.Added;
+
+                    db.SaveChanges();
+                    int id = obj.ID;
+                    foreach (Project p in prjct)
+                    {
+                        p.StudId = id;
+                        db.Entry(p).State = EntityState.Added;
+                        db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    List<Project> prjctsInDB = db.Projects.Where(s=>s.StudId==obj.ID).Select(s => s).ToList();
+                    db.Projects.RemoveRange(prjctsInDB);
+                    db.SaveChanges();
+                    int id = obj.ID;
+
+                    prjct.AddRange(obj.Projects);
+                    foreach (Project p in prjct)
+                    {
+                        p.StudId = id;
+                        db.Entry(p).State = EntityState.Added;
+                        db.SaveChanges();
+                    }
+                }
             }
-            return View();
+            return Json(new { Name = obj.Name });
         }
+
+        public ActionResult Edit(string Name)
+        {
+            Student stud = new Student();
+            if (Name != null)
+            {
+                stud = db.Students.Include("Projects").Where(s => s.Name == Name).Select(s => s).FirstOrDefault();
+            }
+
+            return View("Index",stud);
+        }
+
     }
 }
