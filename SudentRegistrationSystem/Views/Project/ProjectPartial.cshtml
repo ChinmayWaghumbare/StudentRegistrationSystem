@@ -14,13 +14,7 @@
 
 
 
-    @*<div class="form-group">
-            @Html.LabelFor(model => model.ID, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ID, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ID, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
+    @Html.HiddenFor(model=>model.ID)
     <div id="projectDetails">
         <div class="form-group">
             @Html.LabelFor(model => model.PrjctName, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -31,12 +25,12 @@
         </div>
 
         @*<div class="form-group">
-                @Html.LabelFor(model => model.StudId, "StudId", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownList("StudId", null, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.StudId, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
+            @Html.LabelFor(model => model.StudId, "StudId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("StudId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.StudId, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
 
         <div class="form-group">
             @Html.LabelFor(model => model.TeamSize, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -54,13 +48,25 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                @*@Html.ActionLink("Save Projcet","saveProject","Project",Model,new { id="saveProject"})*@
-                <button id="saveProject" type="submit">Save Project</button>
+        @if (Model.ID == 0)
+        {
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    @*@Html.ActionLink("Save Projcet","saveProject","Project",Model,new { id="saveProject"})*@
+                    <button id="saveProject" type="submit">Save Project</button>
+                </div>
             </div>
-        </div>
+        }
 
+        @if (Model.ID != 0)
+        {
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    @*@Html.ActionLink("Save Projcet","saveProject","Project",Model,new { id="saveProject"})*@
+                    <button id="updateProject" type="submit">Update Project</button>
+                </div>
+            </div>
+        }
     </div>
 </div>
 
@@ -69,6 +75,38 @@
 
     $(document).ready(function () {
         $('#saveProject').click(saveProjects);
+
+        $('#updateProject').click(function () {
+            alert("In Update Project");
+
+            var ele = $("tr>td").filter(function () {
+                return $(this).text() == $('#PrjctName').val();
+            }).closest("tr");
+
+            console.log(ele);
+            
+
+            var d = {
+                PrjctName: $('#PrjctName').val(),
+                Description: $('#Description').val(),
+                TeamSize: $('#TeamSize').val(),
+                Student: {
+                    Name: $('#Name').val(),
+                }
+            };
+
+            $.ajax({
+                method: 'Put',
+                url: '\UpdateProject',
+                data: d,
+                success: function () {
+                    alert('Success');
+                },
+                error: function () {
+                    alert('error');
+                }
+            });
+        });
     });
 
     function saveProjects() {

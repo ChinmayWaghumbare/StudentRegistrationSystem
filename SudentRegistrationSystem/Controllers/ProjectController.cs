@@ -11,12 +11,16 @@ namespace SudentRegistrationSystem.Controllers
 {
     public class ProjectController : Controller
     {
+        StudentRegistrationSyastemEntities db = new StudentRegistrationSyastemEntities();
         // GET: Project
         public ActionResult Index(Project obj)
         {
-            if (obj == null)
+            if (obj.PrjctName == null)
                 obj = new Project();
-
+            else
+            {
+                obj = db.Projects.Where(s => s.PrjctName == obj.PrjctName & s.Student.Name == obj.Student.Name).Select(s => s).FirstOrDefault();
+            }
             return PartialView("ProjectPartial",obj);
         }
 

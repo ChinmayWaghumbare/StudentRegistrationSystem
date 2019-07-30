@@ -59,7 +59,7 @@
                     
                     @foreach (Project obj in Model.Projects)
                     {
-                    <tr>
+                    <tr id="@obj.ID">
                         <td>@obj.PrjctName</td>
                         <td>@obj.Description</td>
                         <td>@obj.TeamSize</td>
@@ -102,14 +102,17 @@
 <script type="text/javascript">
     $(".editProject").click(function () {
         var htmlElement = $(this).parent()
-        Prjctobj = {};
-        Prjctobj.PrjctName = htmlElement.find("td").eq(0).html();
-        Prjctobj.Description = htmlElement.find("td").eq(1).html();
-        Prjctobj.TeamSize = htmlElement.find("td").eq(2).html();
-
-        console.log(Prjctobj);
         
-        $.get('@Url.Action("Index", "Project")', Prjctobj, function (response) {
+        var d = {
+            PrjctName: htmlElement.find("td").eq(0).html(),
+            Description: htmlElement.find("td").eq(1).html(),
+            TeamSize: htmlElement.find("td").eq(2).html(),
+            Student: {
+                Name: $('#Name').val()
+            }
+        };
+
+        $.post('@Url.Action("Index", "Project")', d, function (response) {
             $("#Display").html(response);
         });
     });
