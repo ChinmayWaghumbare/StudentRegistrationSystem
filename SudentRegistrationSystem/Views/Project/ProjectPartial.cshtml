@@ -56,6 +56,7 @@
                     <button id="saveProject" type="submit">Save Project</button>
                 </div>
             </div>
+
         }
 
         @if (Model.ID != 0)
@@ -67,6 +68,13 @@
                 </div>
             </div>
         }
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @*@Html.ActionLink("Save Projcet","saveProject","Project",Model,new { id="saveProject"})*@
+                <button id="cancleProject" type="submit">Cancle</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -74,6 +82,11 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+
+        $('#cancleProject').click(function () {
+            $('#Display').empty();
+
+        });
         $('#saveProject').click(saveProjects);
 
         $('#updateProject').click(function () {
@@ -129,7 +142,7 @@
                 success: function (result) {
                     alert("Success");
                     data = result;
-                    markup = '<tr><td>' + data['PrjctName'] + '</td><td>' + data['Description'] + '</td><td>' + data['TeamSize'] + '</td></tr>';
+                    markup = '<tr id=\'0\'><td>' + data['PrjctName'] + '</td><td>' + data['Description'] + '</td><td>' + data['TeamSize'] + '</td><td class=\'editProject\'>Edit</td><td class=\'deleteProject\'>Delete</td></tr>';
                     if ($("#projectDetailsTable tbody").length == 0) {
                         tblMarkup = '<div><h4>Project List</h4><table><thead><tr><th>Project Name</th><th>Description</th><th>Team Size</th></tr></thead><tbody></tbody></table></div>';
                         $("#projectDetailsTable").append(tblMarkup);

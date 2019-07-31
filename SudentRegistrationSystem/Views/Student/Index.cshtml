@@ -63,8 +63,8 @@
                         <td>@obj.PrjctName</td>
                         <td>@obj.Description</td>
                         <td>@obj.TeamSize</td>
-                        <td>@Html.ActionLink("Edit","Index",obj)</td>
-                        <td class="editProject" >Delete</td>
+                        <td class="editProject">Edit</td>
+                        <td class="deleteProject" >Delete</td>
                     </tr>
                     }
                 </tbody>
@@ -100,7 +100,14 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 <script type="text/javascript">
-    $(".editProject").click(function () {
+
+    $(document).on('click','td.deleteProject',function () {
+        var elem = $(this).parent();
+        elem.remove();
+        $('#Display').empty();
+    });
+
+    $(document).on('click','td.editProject',function () {
         var htmlElement = $(this).parent()
         
         var d = {

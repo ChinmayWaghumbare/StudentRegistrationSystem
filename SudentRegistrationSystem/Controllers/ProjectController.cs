@@ -17,7 +17,7 @@ namespace SudentRegistrationSystem.Controllers
         {
             if (obj.PrjctName == null)
                 obj = new Project();
-            else
+            else if (db.Projects.Count(s => s.PrjctName == obj.PrjctName)>0)
             {
                 obj = db.Projects.Where(s => s.PrjctName == obj.PrjctName & s.Student.Name == obj.Student.Name).Select(s => s).FirstOrDefault();
             }
