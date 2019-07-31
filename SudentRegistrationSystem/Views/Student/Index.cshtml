@@ -117,12 +117,7 @@
         });
     });
 
-   function editProjectBtn (Prjctobj) {
-        console.log(Prjctobj);
-        $.get('@Url.Action("Index", "Project")', Prjctobj, function (response) {
-        $("#Display").html(response);
-    });
-    };
+   
 
 $("#addProject").click(function () {
     $.get('@Url.Action("Index", "Project")', {}, function (response) {
@@ -138,7 +133,7 @@ $("#addProject").click(function () {
             var project = {};
             project.Id = 0;
             project.PrjctName = row.find("td").eq(0).html();
-            project.TeamSize = 1;
+            project.TeamSize = row.find("td").eq(2).html();
             project.Description = row.find("td").eq(1).html();
             projects.push(project);
            

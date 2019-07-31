@@ -39,5 +39,7 @@ namespace SudentRegistrationSystem.Controllers
             }
             return Json(prjobj);
         }
+
+        
     }
 }

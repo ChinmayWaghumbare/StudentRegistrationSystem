@@ -83,7 +83,10 @@
                 return $(this).text() == $('#PrjctName').val();
             }).closest("tr");
 
-            console.log(ele);
+            console.log(ele[0].cells[0].innerHTML);
+
+            ele[0].cells[1].innerHTML = $('#Description').val();
+            ele[0].cells[2].innerHTML = $('#TeamSize').val();
             
 
             var d = {
@@ -95,17 +98,19 @@
                 }
             };
 
-            $.ajax({
-                method: 'Put',
-                url: '\UpdateProject',
-                data: d,
-                success: function () {
-                    alert('Success');
-                },
-                error: function () {
-                    alert('error');
-                }
-            });
+            $('#Display').empty();
+
+            //$.ajax({
+            //    method: 'Put',
+            //    url: '\UpdateProject',
+            //    data: d,
+            //    success: function () {
+            //        alert('Success');
+            //    },
+            //    error: function () {
+            //        alert('error');
+            //    }
+            //});
         });
     });
 
