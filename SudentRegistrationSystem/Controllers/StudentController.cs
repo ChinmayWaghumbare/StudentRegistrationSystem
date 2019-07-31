@@ -75,5 +75,11 @@ namespace SudentRegistrationSystem.Controllers
             return View("Index",stud);
         }
 
+        public ActionResult List()
+        {
+            List<Student> studList = new List<Student>();
+            studList = db.Students.ToList();
+            return View(studList);
+        }
     }
 }
